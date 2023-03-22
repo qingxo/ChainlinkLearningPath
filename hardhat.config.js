@@ -1,5 +1,6 @@
 /** @type import('hardhat/config').HardhatUserConfig */
 require("ethers");
+require("hardhat-deploy");
 require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-waffle");
 
@@ -16,12 +17,12 @@ module.exports = {
         version: "0.4.24",
       }
     ]
-  }, 
+  },
 
   paths: {
     sources: "./contracts",
     tests: "./test",
     cache: "./build/cache",
     artifacts: "./build/artifacts"
-    },
+  },
 };

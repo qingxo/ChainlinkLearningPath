@@ -3,7 +3,7 @@ const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
 const { assert } = require("chai");
 
 
-describe("单元测试：Chainlink Data feed", async function() {
+describe("单元测试：Chainlink Data feed", async function () {
 
     /**
      * the function is to deploy smart contracts
@@ -22,7 +22,7 @@ describe("单元测试：Chainlink Data feed", async function() {
         const mockV3AggregatorLink = await mockV3AggregatorFactory
             .connect(deployer)
             .deploy(DECIMALS, LINK_INITIAL_PRICE);
-        
+
         const mockV3AggregatorBtc = await mockV3AggregatorFactory
             .connect(deployer)
             .deploy(DECIMALS, BTC_INITIAL_PRICE);
@@ -30,9 +30,9 @@ describe("单元测试：Chainlink Data feed", async function() {
         const mockV3AggregatorEth = await mockV3AggregatorFactory
             .connect(deployer)
             .deploy(DECIMALS, ETH_INITIAL_PRICE);
-        
+
         const dataFeedFactory = await ethers.getContractFactory("DataFeedTask");
-        
+
         const dataFeed = await dataFeedFactory
             .connect(deployer)
             .deploy(
@@ -51,6 +51,9 @@ describe("单元测试：Chainlink Data feed", async function() {
             deployDataFeedFixture
         )
         const response = await dataFeed.getLinkPriceFeed();
+        // console.log('response:', response);
+        // console.log('mockV3AggregatorLink address:', mockV3AggregatorLink.address);
+
         assert.equal(response, mockV3AggregatorLink.address);
     })
 
@@ -60,15 +63,17 @@ describe("单元测试：Chainlink Data feed", async function() {
             deployDataFeedFixture
         )
         const response = await dataFeed.getBtcPriceFeed();
+        console.log('mockV3AggregatorBtc address:', mockV3AggregatorBtc.address);
         assert.equal(response, mockV3AggregatorBtc.address);
     })
-      
+
 
     it("单元测试 0-2：ETH aggregator 地址配置正确", async () => {
         const { dataFeed, mockV3AggregatorEth } = await loadFixture(
             deployDataFeedFixture
         )
         const response = await dataFeed.getEthPriceFeed();
+        console.log('mockV3AggregatorEth address:', mockV3AggregatorEth.address);
         assert.equal(response, mockV3AggregatorEth.address);
     })
 
@@ -91,7 +96,7 @@ describe("单元测试：Chainlink Data feed", async function() {
         const dataFeedRound = (await mockV3AggregatorBtc.latestRoundData()).answer;
         assert.equal(dataFeedLatestPrice.toString(), dataFeedRound.toString())
     })
-        
+
     it("单元测试 0-5: ETH aggregator 返回正确结果", async () => {
         const { dataFeed, mockV3AggregatorEth } = await loadFixture(
             deployDataFeedFixture

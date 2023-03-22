@@ -46,9 +46,13 @@ contract DataFeedTask {
         address _ethPriceFeed
     ) {
         owner = msg.sender;
-        _linkPriceFeed = 0x48731cF7e84dc94C5f84577882c14Be11a5B7456;
-        _btcPriceFeed = 0xA39434A63A52E749F02807ae27335515BA4b07F7;
-        _ethPriceFeed = 0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e;
+        // _linkPriceFeed = 0x48731cF7e84dc94C5f84577882c14Be11a5B7456;// sepolia address
+        // _btcPriceFeed = 0xA39434A63A52E749F02807ae27335515BA4b07F7;// sepolia address
+        // _ethPriceFeed = 0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e;// sepolia address
+
+        _linkPriceFeed = 0x5FbDB2315678afecb367f032d93F642f64180aa3; // test address
+        _btcPriceFeed = 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512; // test address
+        _ethPriceFeed = 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0; // test address
         //修改以下 solidity 代码
         linkPriceFeed = AggregatorV3Interface(_linkPriceFeed);
         btcPriceFeed = AggregatorV3Interface(_btcPriceFeed);
