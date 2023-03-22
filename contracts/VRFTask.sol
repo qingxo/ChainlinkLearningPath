@@ -9,35 +9,36 @@ import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
  * 通过 fulfillRandomWords 函数给 s_randomness[] 填入 5 个随机数
  * 保证 5 个随机数为 5 以内，并且不重复
  * 参考视频教程： https://www.bilibili.com/video/BV1ed4y1N7Uv
- * 
+ *
  * 任务 2 完成标志：
  * 1. 通过命令 "yarn hardhat test" 使得单元测试 8-10 通过
  * 2. 通过 Remix 在 goerli 测试网部署，并且测试执行是否如预期
-*/
-
+ *  0x2Ca8E0C643bDe4C2E08ab1fA0da3401AdAD7734D goerli 网络
+ */
 
 contract VRFTask is VRFConsumerBaseV2 {
     VRFCoordinatorV2Interface immutable COORDINATOR;
-    
-    /* 
+    // address vrfCoordinatorAddr = 0x2Ca8E0C643bDe4C2E08ab1fA0da3401AdAD7734D ;
+
+    /*
      * 步骤 1 - 获得 VRFCoordinator 合约的地址和所对应的 keyHash
      * 修改变量
      *   CALL_BACK_LIMIT：回调函数最大 gas 数量
      *   REQUEST_CONFIRMATIONS：最小确认区块数
      *   NUM_WORDS：单次申请随机数的数量
-     * 
+     *
      * 注意：
-     * 通过 Remix 部署在非本地环境时，相关参数请查看 
+     * 通过 Remix 部署在非本地环境时，相关参数请查看
      * https://docs.chain.link/docs/vrf/v2/supported-networks/，获取 keyHash 的指和 vrfCoordinator 的地址
      * 本地环境在测试脚本中已经自动配置
-     * 
-     */ 
+     *
+     */
 
     // Chainlink VRF 在接收到请求后，会通过 fulfillRandomWords 将数据写回到用户合约，此过程需要消耗 gas
     // CALL_BACK_LIMIT 是回调函数可以消耗的最大 gas，根据回调函数的逻辑适当调整 CALL_BACK_LIMIT
     // 详情请查看：https://docs.chain.link/vrf/v2/subscription/examples/get-a-random-number#analyzing-the-contract
     uint32 constant CALL_BACK_LIMIT = 100;
-    
+
     // Chainlink VRF 在返回随机数之前应该等待的 Confirmation，值越大，返回的值越安全
     uint16 constant REQUEST_CONFIRMATIONS = 1;
 
@@ -59,12 +60,12 @@ contract VRFTask is VRFConsumerBaseV2 {
 
     event ReturnedRandomness(uint256[] randomWords);
 
-    modifier onlyOwner {
+    modifier onlyOwner() {
         require(msg.sender == s_owner);
         _;
     }
 
-    /**  
+    /**
      * 步骤 2 - 在构造函数中，初始化相关变量
      * COORDINATOR，s_subscriptionId 和 s_keyHash
      * */
@@ -74,31 +75,34 @@ contract VRFTask is VRFConsumerBaseV2 {
         bytes32 _keyHash
     ) VRFConsumerBaseV2(vrfCoordinator) {
         s_owner = msg.sender;
-        
+
         //修改以下 solidity 代码
-        COORDINATOR = VRFCoordinatorV2Interface(address(0));
+        COORDINATOR = VRFCoordinatorV2Interface(
+            0x2Ca8E0C643bDe4C2E08ab1fA0da3401AdAD7734D
+        );
         s_subscriptionId = 0;
         s_keyHash = "";
     }
 
-    /** 
+    /**
      * 步骤 3 - 发送随机数请求
-     * */ 
+     * */
     function requestRandomWords() external onlyOwner {
         //在此添加并且修改 solidity 代码
+        // s_requestId
     }
 
     /**
      * 步骤 4 - 接受随机数，完成逻辑获取 5 个 5 以内**不重复**的随机数
      * 关于如何使得获取的随机数不重复，清参考以下代码
      * https://gist.github.com/cleanunicorn/d27484a2488e0eecec8ce23a0ad4f20b
-     *  */ 
-    function fulfillRandomWords(uint256 requestId, uint256[] memory _randomWords)
-        internal
-        override
-    {
+     *  */
+    function fulfillRandomWords(
+        uint256 requestId,
+        uint256[] memory _randomWords
+    ) internal override {
         //在此添加 solidity 代码
-        
+
         emit ReturnedRandomness(s_randomWords);
     }
 }
